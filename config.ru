@@ -5,7 +5,7 @@ if ActiveRecord::Migrator.needs_migration?
 end
 
 use Rack::MethodOverride
-use GolfClubsController
-use GolfBagsController
+use VitaminsController
+use VitaminPacksController
 use UsersController
 run ApplicationController
