@@ -1,0 +1,6 @@
+<% @packs.each do |pack| %>
+  <%= pack.name %><br />
+  <a href="/packs/<%=pack.id%>/edit">Edit</a>
+  <br />
+  <br />
+<% end %>
