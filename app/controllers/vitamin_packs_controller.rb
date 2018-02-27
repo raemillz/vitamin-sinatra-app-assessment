@@ -1,0 +1,3 @@
+class VitaminPacksController < ApplicationController
+
+end
