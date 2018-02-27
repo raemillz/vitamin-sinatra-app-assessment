@@ -1,0 +1,7 @@
+<% @vitamins.each do |vitamin| %>
+  <%= vitamin.name %><br />
+  <%= vitamin.benefit %> <br />
+  <a href="/vitamins/<%=vitamin.id%>/edit">Edit</a>
+  <br />
+  <br />
+<% end %>

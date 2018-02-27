@@ -1,0 +1,18 @@
+<h1>Add a New Vitamin</h1>
+
+<form action="/vitamins" method="POST">
+  <label> Vitamin Name </label>
+  <input type="text" name="name"> </br>
+
+  <label> Vitain Benefit </label>
+  <input type="text" name="benefit"> </br>
+
+  <label> Which pack does this belong in? </label>
+  <select name="vitamin_pack_id">
+    <% current_user.vitamin_packs.each do |pack| %>
+      <option value=<%=pack.id %>><%= pack.name %></option>
+    <% end %>
+  </select>
+
+  <input type="submit" value="Create">
+</form>
