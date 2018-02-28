@@ -5,11 +5,11 @@
   <input type="text" name="name"> </br>
 
   <label> Vitamin Benefit </label>
-  <input type="text" name="benefit"> </br>
+  <input type="text" name="benefits"> </br>
 
   <label>What pack does this vitamin belong in?</label><br>
   <% VitaminPack.all.each do |pack| %>
-  <input type="radio" name="user[vitamin][packs][name]" id="<%= pack.id %>" value="<%= pack.name %>"><%= pack.name %></input><br>
+  <input type="radio" name="vitamin_pack_id" id="<%= pack.id %>" value="<%= pack.name %>"><%= pack.name %></input><br>
 <% end %><br>
 
   <input type="submit" value="Create">

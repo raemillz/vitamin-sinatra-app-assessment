@@ -34,7 +34,7 @@ class VitaminsController < ApplicationController
     erb :'vitamins/show'
   end
 
-  post "/vitamin" do
+  post "/vitamins" do
     redirect_if_not_logged_in
     unless Vitamin.valid_params?(params)
       redirect "/vitamins/new?error=invalid vitamin"
