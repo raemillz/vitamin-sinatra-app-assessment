@@ -1,6 +1,6 @@
 <% @packs.each do |pack| %>
-  <%= pack.name %><br />
-  <a href="/packs/<%=pack.id%>/edit">Edit</a>
+  <li><%= pack.name %><br /></li>
+  <ul><a href="/packs/<%=pack.id%>/edit">Edit</a></ul>
   <br />
   <br />
 <% end %>
