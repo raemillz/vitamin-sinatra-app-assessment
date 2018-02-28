@@ -7,12 +7,10 @@
   <label> Vitamin Benefit </label>
   <input type="text" name="benefit"> </br>
 
-  <label> Which pack does this belong in? </label>
-  <select name="vitamin_pack_id">
-    <% current_user.vitamin_packs.each do |pack| %>
-      <option value=<%=pack.id %>><%= pack.name %></option>
-    <% end %>
-  </select>
+  <label>What pack does this vitamin belong in?</label><br>
+  <% VitaminPack.all.each do |pack| %>
+  <input type="radio" name="user[vitamin][packs][name]" id="<%= pack.id %>" value="<%= pack.name %>"><%= pack.name %></input><br>
+<% end %><br>
 
   <input type="submit" value="Create">
 </form>
