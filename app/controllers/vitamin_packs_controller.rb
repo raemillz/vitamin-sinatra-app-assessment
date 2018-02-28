@@ -1,4 +1,8 @@
+require 'rack-flash'
+
 class VitaminPacksController < ApplicationController
+  use Rack::Flash
+
   get "/packs" do
     redirect_if_not_logged_in
     @packs = VitaminPack.all

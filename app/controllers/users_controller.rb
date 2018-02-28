@@ -1,17 +1,7 @@
+require 'rack-flash'
+
 class UsersController < ApplicationController
-
-  get '/users/:slug' do
-    if !logged_in?
-      redirect '/signup'
-    end
-
-    @user = User.find_by_slug(params[:slug])
-    if !@user.nil? && @user == current_user
-      erb :'users/show'
-    else
-      redirect '/packs'
-    end
-  end
+  use Rack::Flash
 
   get '/signup' do
     if !session[:user_id]
@@ -32,11 +22,16 @@ class UsersController < ApplicationController
   end
 
   get '/login' do
-    @error_message = params[:error]
-    if !session[:user_id]
-      erb :'users/login'
-    else
+    @user = User.find_by(username: params[:username])
+    if params[:username] == "" || params[:password] == ""
+      flash[:message] = "You have left one or more fields blank. Please try again."
+      redirect '/login'
+    elsif @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
       redirect '/packs'
+    else
+      flash[:message] = "You have entered an incorrect password/username. Please try again, or create an account."
+      redirect '/login'
     end
   end
 
@@ -47,6 +42,19 @@ class UsersController < ApplicationController
       redirect "/packs"
     else
       redirect to '/signup'
+    end
+  end
+
+  get '/users/:slug' do
+    if !logged_in?
+      redirect '/signup'
+    end
+
+    @user = User.find_by_slug(params[:slug])
+    if !@user.nil? && @user == current_user
+      erb :'users/show'
+    else
+      redirect '/packs'
     end
   end
 
