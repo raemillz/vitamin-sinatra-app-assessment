@@ -7,31 +7,30 @@ class UsersController < ApplicationController
     if !session[:user_id]
       erb :'users/new'
     else
-      redirect to '/vitamins'
+      redirect to '/packs/new'
     end
   end
 
   post '/signup' do
     if params[:username] == "" || params[:password] == ""
-      redirect to '/signup'
+      flash[:message] = "You have left one or more fields blank!"
+      redirect '/signup'
+    elsif User.find_by(:username => params[:username])
+      flash[:message] = "That username is already in use. Please try again."
+      redirect '/signup'
     else
       @user = User.create(:username => params[:username], :password => params[:password])
       session[:user_id] = @user.id
-      redirect '/packs/new'
+      flash[:message] = "Thank you for signing up for Vitamin Tracker!"
+      redirect '/login'
     end
   end
 
   get '/login' do
-    @user = User.find_by(username: params[:username])
-    if params[:username] == "" || params[:password] == ""
-      flash[:message] = "You have left one or more fields blank. Please try again."
-      redirect '/login'
-    elsif @user && @user.authenticate(params[:password])
-      session[:user_id] = @user.id
-      redirect '/packs'
+    if !session[:user_id]
+      erb :'users/new'
     else
-      flash[:message] = "You have entered an incorrect password/username. Please try again, or create an account."
-      redirect '/login'
+      redirect to '/packs'
     end
   end
 
