@@ -1,0 +1,8 @@
+<h1>Edit <%= @pack.name %></h1>
+
+<form action="/packs/<%=@pack.id %>" method="POST">
+  <label> Pack Name </label>
+  <input type="text" name="name" value="<%=@pack.name %>"> </br>
+
+  <input type="submit" value="Update">
+</form>
