@@ -1,0 +1,10 @@
+  <h2>Packs</h2>
+  <%= @pack.name %><br />
+  <ul>
+  <% @pack.vitamins.each do |vitamin| %>
+    <li><a href="/vitamins/<%=vitamin.id%>"><%= vitamin.name %></a></li>
+  <% end%>
+  </ul>
+  <a href="/packs/<%=@pack.id%>/edit">Edit</a>
+  <br />
+  <br />
