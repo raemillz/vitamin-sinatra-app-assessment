@@ -24,8 +24,6 @@ class VitaminsController < ApplicationController
     else
       flash[:message] = "You only have access to edit your owns vitamins."
       redirect to '/vitamins'
-    else
-      redirect to '/vitamins'
     end
   end
 
