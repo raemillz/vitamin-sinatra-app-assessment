@@ -22,6 +22,9 @@ class VitaminsController < ApplicationController
     if @vitamin && @vitamin.vitamin_pack.user == current_user
       erb :'vitamins/edit'
     else
+      flash[:message] = "You only have access to edit your owns vitamins."
+      redirect to '/vitamins'
+    else
       redirect to '/vitamins'
     end
   end
@@ -71,6 +74,9 @@ class VitaminsController < ApplicationController
       @vitamin = Vitamin.find_by_id(params[:id])
       if @vitamin && @vitamin.user == current_user
         @vitamin.delete
+      else
+        flash[:message] = "You only have access to delete your owns vitamins."
+        redirect to '/vitamins'
       end
       redirect to '/vitamins'
     else
