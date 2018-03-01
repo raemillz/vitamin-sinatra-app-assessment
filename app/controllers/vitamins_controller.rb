@@ -18,32 +18,64 @@ class VitaminsController < ApplicationController
   get "/vitamins/:id/edit" do
     redirect_if_not_logged_in
     @error_message = params[:error]
-    @vitamin = Vitamin.find(params[:id])
-    erb :'vitamins/edit'
+    @vitamin = Vitamin.find_by_id(params[:id])
+    if @vitamin && @vitamin.user == current_user
+      erb :'vitamins/edit'
+    else
+      redirect to '/vitamins'
+    end
   end
 
-  post "/vitamins/:id" do
+  patch "/vitamins/:id" do
     redirect_if_not_logged_in
-    @vitamin = Vitamin.find(params[:id])
-    unless Vitamin.valid_params?(params)
-      redirect "/vitamins/#{@vitamin.id}/edit?error=invalid vitamin"
+    if params[:content] == ""
+      redirect to "/vitamins/#{params[:id]}/edit"
+    else
+      @vitamin = Vitamin.find_by_id(params[:id])
+      if @vitamin && @vitamin.user == current_user
+        if @vitamin.update(content: params[:content])
+          redirect to "/vitamins/#{@vitamin.id}"
+        else
+          redirect to "/vitamins/#{@vitamin.id}/edit"
+        end
+      else
+        redirect to '/vitamins'
+      end
     end
-    @vitamin.update(params.select{|k|k=="name" || k=="benefit" || k=="vitamin_pack_id"})
-    redirect "/vitamins/#{@vitamin.id}"
   end
 
   get "/vitamins/:id" do
     redirect_if_not_logged_in
-    @vitamin = Vitamin.find(params[:id])
+    @vitamin = Vitamin.find_by_id(params[:id])
     erb :'vitamins/show'
   end
 
   post "/vitamins" do
     redirect_if_not_logged_in
-    unless Vitamin.valid_params?(params)
-      redirect "/vitamins/new?error=invalid vitamin"
+    if params[:benefits] == "" && params[:name] == ""
+      redirect to "/vitamins/new"
+    else
+      current_user.vitamin_packs.each do |pack|
+        @vitamin = pack.vitamins.build(name: params[:name], benefits: params[:benefits])
+      end
+      if @vitamin.save
+        redirect to "/vitamins/#{@vitamin.id}"
+      else
+        redirect to "/vitamins/new"
+      end
     end
-    Vitamin.create(params)
-    redirect "/vitamins"
   end
+
+  delete '/vitamins/:id/delete' do
+    if logged_in?
+      @vitamin = Vitamin.find_by_id(params[:id])
+      if @vitamin && @vitamin.user == current_user
+        @vitamin.delete
+      end
+      redirect to '/vitamins'
+    else
+      redirect to '/login'
+    end
+  end
+
 end
