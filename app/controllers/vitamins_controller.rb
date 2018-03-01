@@ -27,7 +27,7 @@ class VitaminsController < ApplicationController
     end
   end
 
-  patch "/vitamins/:id" do
+  post "/vitamins/:id" do
     redirect_if_not_logged_in
     if params[:content] == ""
       redirect to "/vitamins/#{params[:id]}/edit"
@@ -53,7 +53,8 @@ class VitaminsController < ApplicationController
 
   post "/vitamins" do
     redirect_if_not_logged_in
-    if params[:benefits] == "" && params[:name] == ""
+    if params[:benefits] == "" || params[:name] == ""
+      flash[:message] = "You must fill in both fields to create an vitamin."
       redirect to "/vitamins/new"
     else
       current_user.vitamin_packs.each do |pack|

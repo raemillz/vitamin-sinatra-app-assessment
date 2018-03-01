@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
   post '/signup' do
     if params[:username] == "" || params[:password] == ""
+      flash[:message] = "You must fill in both fields to create an account."
       redirect to '/signup'
     else
       @user = User.new(:username => params[:username], :password => params[:password])
