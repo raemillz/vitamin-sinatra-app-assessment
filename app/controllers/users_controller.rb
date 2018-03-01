@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     if logged_in?
       redirect to '/packs'
     else
-      erb :'users/new'
+      erb :'/users/new'
     end
   end
 
@@ -28,9 +28,9 @@ class UsersController < ApplicationController
 
   get '/login' do
     if !logged_in?
-      erb :'/'
+      erb :'/users/login'
     else
-      redirect to '/packs'
+      redirect to '/users/:id'
     end
   end
 
@@ -41,21 +41,21 @@ class UsersController < ApplicationController
       redirect '/login'
     elsif @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
-      redirect '/packs'
+      redirect '/users/:id'
     else
       flash[:message] = "You have entered an incorrect password/username. Please try again, or create an account."
-      redirect to '/'
+      redirect to '/login'
     end
   end
 
-  get '/users/:slug' do
+  get '/users/:id' do
     if logged_in?
-      @user = User.find_by_slug(params[:slug])
-      @packs = @user.packs
-      @packs.order! 'created_at DESC'
+      @user = User.find(params[:id])
+    #  @packs = @user.vitamin_packs
+    #  @packs.order! 'created_at DESC'
       erb :'/users/show'
     else
-      redirect '/'
+      redirect '/login'
     end
   end
 
