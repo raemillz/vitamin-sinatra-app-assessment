@@ -70,7 +70,7 @@ class VitaminsController < ApplicationController
   delete '/vitamins/:id/delete' do
     if logged_in?
       @vitamin = Vitamin.find_by_id(params[:id])
-      if @vitamin && @vitamin.user == current_user
+      if @vitamin && @vitamin.vitamin_pack.user == current_user
         @vitamin.delete
       else
         flash[:message] = "You only have access to delete your owns vitamins."
