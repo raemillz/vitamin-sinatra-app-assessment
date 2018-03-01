@@ -19,7 +19,7 @@ class VitaminsController < ApplicationController
     redirect_if_not_logged_in
     @error_message = params[:error]
     @vitamin = Vitamin.find_by_id(params[:id])
-    if @vitamin && @vitamin.user == current_user
+    if @vitamin && @vitamin.vitamin_pack.user == current_user
       erb :'vitamins/edit'
     else
       redirect to '/vitamins'

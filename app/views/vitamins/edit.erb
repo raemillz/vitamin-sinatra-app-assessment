@@ -1,0 +1,10 @@
+<h1>Edit <%= @vitamin.name %></h1>
+
+<form action="/vitamins/<%=@vitamin.id %>" method="POST">
+  <label> Vitamin Name </label>
+  <input type="text" name="name" value="<%=@vitamin.name %>"> </br>
+  <label> Vitamin Benefits </label>
+  <input type="text" name="benefits" value="<%=@vitamin.benefits %>"> </br>
+  
+  <input type="submit" value="Update">
+</form>
