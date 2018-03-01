@@ -27,7 +27,7 @@ class VitaminPacksController < ApplicationController
       end
   end
 
-  patch "/packs/:id" do
+  post "/packs/:id" do
     redirect_if_not_logged_in
     if params[:name] == ""
       redirect to "/packs/#{params[:id]}/edit"
