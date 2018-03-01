@@ -1,10 +1,8 @@
-  <h2>Packs</h2>
-  <%= @pack.name %><br />
-  <ul>
-  <% @pack.vitamins.each do |vitamin| %>
-    <li><a href="/vitamins/<%=vitamin.id%>"><%= vitamin.name %></a></li>
-  <% end%>
-  </ul>
-  <a href="/packs/<%=@pack.id%>/edit">Edit</a>
-  <br />
-  <br />
+<p><%= @pack.name %>
+
+<form method="post" action="/packs/<%=@pack.id%>/delete">
+  <input id="hidden" type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="Delete Pack">
+</form>
+
+<a href="/packs/<%=@pack.id%>/edit">Edit Pack </a>

@@ -52,12 +52,16 @@ class VitaminPacksController < ApplicationController
 
   post "/packs" do
     redirect_if_not_logged_in
-
-    unless VitaminPack.valid_params?(params)
-      redirect "/packs/new?error=invalid vitamin pack"
+    if params[:content] == ""
+      redirect to "/packs/new"
+    else
+      @pack = current_user.vitamin_packs.build(name: params[:name])
+      if @pack.save
+        redirect to "/packs/#{@pack.id}"
+      else
+        redirect to "/packs/new"
+      end
     end
-    VitaminPack.create(params)
-    redirect "/packs"
   end
 
   delete '/packs/:id/delete' do
