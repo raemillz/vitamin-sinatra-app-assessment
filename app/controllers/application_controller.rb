@@ -11,7 +11,11 @@ class ApplicationController < Sinatra::Base
 
 
   get '/' do
-    erb :index
+    if logged_in?
+      redirect '/packs'
+    else
+      erb :index
+    end
   end
 
   helpers do
