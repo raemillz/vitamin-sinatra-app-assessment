@@ -18,23 +18,35 @@ class VitaminPacksController < ApplicationController
   get "/packs/:id/edit" do
     redirect_if_not_logged_in
     @error_message = params[:error]
-    @pack = VitaminPack.find(params[:id])
-    erb :'vitamin_packs/edit'
+    @pack = VitaminPack.find_by_id(params[:id])
+      if @pack && @pack.user == current_user
+        erb :'vitamin_packs/edit'
+      else
+        redirect to '/packs'
+      end
   end
 
-  post "/packs/:id" do
+  patch "/packs/:id" do
     redirect_if_not_logged_in
-    @pack = VitaminPack.find(params[:id])
-    unless VitaminPack.valid_params?(params)
-      redirect "/packs/#{@pack.id}/edit?error=invalid vitamin pack"
+    if params[:name] == ""
+      redirect to "/packs/#{params[:id]}/edit"
+    else
+      @pack = VitaminPack.find_by_id(params[:id])
+      if @pack && @pack.user == current_user
+        if @pack.update(name: params[:name])
+          redirect to "/packs/#{@pack.id}"
+        else
+          redirect to "/packs/#{@pack.id}/edit"
+        end
+      else
+        redirect to '/packs'
+      end
     end
-    @pack.update(params.select{|k|k=="name" || k=="capacity"})
-    redirect "/packs/#{@pack.id}"
   end
 
   get "/packs/:id" do
     redirect_if_not_logged_in
-    @pack = VitaminPack.find(params[:id])
+    @pack = VitaminPack.find_by_id(params[:id])
     erb :'vitamin_packs/show'
   end
 
@@ -46,6 +58,18 @@ class VitaminPacksController < ApplicationController
     end
     VitaminPack.create(params)
     redirect "/packs"
+  end
+
+  delete '/packs/:id/delete' do
+    if logged_in?
+      @pack = VitaminPack.find_by_id(params[:id])
+      if @pack && @pack.user == current_user
+        @pack.delete
+      end
+      redirect to '/packs'
+    else
+      redirect to '/login'
+    end
   end
 
 end

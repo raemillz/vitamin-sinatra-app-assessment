@@ -13,16 +13,12 @@ class UsersController < ApplicationController
 
   post '/signup' do
     if params[:username] == "" || params[:password] == ""
-      flash[:message] = "You have left one or more fields blank!"
-      redirect '/signup'
-    elsif User.find_by(:username => params[:username])
-      flash[:message] = "That username is already in use. Please try again."
-      redirect '/signup'
+      redirect to '/signup'
     else
-      @user = User.create(:username => params[:username], :password => params[:password])
+      @user = User.new(:username => params[:username], :password => params[:password])
+      @user.save
       session[:user_id] = @user.id
-      flash[:message] = "Thank you for signing up for Vitamin Tracker!"
-      redirect '/login'
+      redirect to '/packs'
     end
   end
 
@@ -30,38 +26,33 @@ class UsersController < ApplicationController
     if !logged_in?
       erb :'/users/login'
     else
-      redirect to '/users/:id'
+      @user = current_user.vitamin_packs.build(name: params[:name])
+      redirect to '/users/#{@user.id}'
     end
   end
 
   post '/login' do
-    @user = User.find_by(username: params[:username])
-    if params[:username] == "" || params[:password] == ""
-      flash[:message] = "You have left one or more fields blank. Please try again."
-      redirect '/login'
-    elsif @user && @user.authenticate(params[:password])
-      session[:user_id] = @user.id
-      redirect '/users/:id'
+    user = User.find_by(:username => params[:username])
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect "/packs"
     else
-      flash[:message] = "You have entered an incorrect password/username. Please try again, or create an account."
-      redirect to '/login'
+      redirect to '/signup'
     end
   end
 
-  get '/users/:id' do
+  get '/users/:slug' do
     if logged_in?
-      @user = User.find(params[:id])
-    #  @packs = @user.vitamin_packs
-    #  @packs.order! 'created_at DESC'
+      @user = User.find_by_slug(params[:slug])
       erb :'/users/show'
     else
-      redirect '/login'
+      redirect '/packs'
     end
   end
 
   get '/logout' do
     if logged_in?
-      session.clear
+      session.destroy
       redirect '/login'
     else
       redirect '/'
