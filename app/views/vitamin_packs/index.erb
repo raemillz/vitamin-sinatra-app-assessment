@@ -3,6 +3,12 @@
 
 <% @packs.each do |pack| %>
   <div>
-    <li><%= pack.name %></li>
+    Name: <%= pack.name %><br />
+    Reference ID: <%= pack.id %><br />
+    <% pack.vitamins.each do |vitamin| %>
+    Vitamins:<br />
+    <li><%= vitamin.name %></li><br />
+    <%end%>
+    <br />
   </div>
 <% end %>
