@@ -1,6 +1,5 @@
 <p> Here are your Vitamin Packs, <%= @user.username %>
 <% @user.vitamin_packs.each do |pack| %>
-  <ul>
-    <li><a href="/packs/<%=pack.id%>"><%= pack.name %></a></li>
-  </ul>
+  <div>
+  <a href="/packs/<%=pack.id%>"><%= pack.name %></a>
 <% end %>
